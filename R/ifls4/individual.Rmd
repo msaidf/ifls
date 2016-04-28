@@ -9,34 +9,34 @@ output:
       smooth_scroll: yes 
 ---
 
-  <script language="javascript"> 
-    function toggle(num) {
-        var ele = document.getElementById("toggleText" + num);
-        var text = document.getElementById("displayText" + num);
-        if(ele.style.display == "block") {
-            ele.style.display = "none";
-            text.innerHTML = "show";
-        }
-        else {
-            ele.style.display = "block";
-            text.innerHTML = "hide";
-        }
-    } 
-  </script>
+  <!-- <script language="javascript">                                  -->
+  <!--   function toggle(num) {                                        -->
+  <!--       var ele = document.getElementById("toggleText" + num);    -->
+  <!--       var text = document.getElementById("displayText" + num);  -->
+  <!--       if(ele.style.display == "block") {                        -->
+  <!--           ele.style.display = "none";                           -->
+  <!--           text.innerHTML = "show";                              -->
+  <!--       }                                                         -->
+  <!--       else {                                                    -->
+  <!--           ele.style.display = "block";                          -->
+  <!--           text.innerHTML = "hide";                              -->
+  <!--       }                                                         -->
+  <!--   }                                                             -->
+  <!-- </script>                                                       -->
 
 
-   <a id="displayText" href="javascript:toggle(1);">Show code</a>
-   <div id="toggleText1" style="display: none">
+  <!--  <a id="displayText" href="javascript:toggle(1);">Show code</a> -->
+  <!--  <div id="toggleText1" style="display: none">                   -->
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = T, warning = FALSE, cache=T)
-```
-
-```{r}
-options(autoSetVariableLabels = TRUE, autoSetValueLabels = TRUE, value_labels = "haven", read_stata = "haven", scipen=10)
+options(autoSetVariableLabels = TRUE
+        , autoSetValueLabels = TRUE
+        , value_labels = "haven"
+        , read_stata = "haven"
+        , scipen=10)
 
 pacman::p_load(  foreign
-               , myfunc
                 , plyr
                 , Hmisc
                 , ggplot2
@@ -53,11 +53,9 @@ pacman::p_load(  foreign
                 , dplyr
                 , magrittr
                 )
-```
-</div>
-
-```{r, include=F}
-roster07 = read_stata('~/dropbox/Dissertation/IFLS/ifls07/hh07_all_dta/bk_ar1.dta') %>%  tbl_df
+roster07 = 
+    read_stata('~/dropbox/Dissertation/IFLS/ifls07/hh07_all_dta/bk_ar1.dta') %>%  
+        tbl_df
 lroster07 = get_label(roster07)
 ```
 
@@ -97,8 +95,6 @@ roster07 =
 
 
 ## Education coding
-   <a id="displayText" href="javascript:toggle(5);">Show code</a>
-   <div id="toggleText5" style="display: none">
 
 ```{r}
 roster07 %<>% mutate(primgrad=NA,jungrad=NA,highgrad=NA, colgrad=NA)
@@ -185,4 +181,3 @@ roster07$colgrad[with(roster07, edulevel %in% c(13, 60:63) & edugrade==7)] <- 1
 roster07$colgrad[with(roster07, edulevel %in% 62:63)] <- 1
 roster07$colgrad[with(roster07, edulevel %in% c(13, 60:63) & edugrade!=7)] <- 0
 ```
-</div>
