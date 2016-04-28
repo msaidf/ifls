@@ -1,3 +1,6 @@
 cache/
 *_cache/
 .-rplugin~
+*.html
+*.md
+*.rda

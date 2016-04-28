@@ -9,25 +9,6 @@ output:
       smooth_scroll: yes 
 ---
 
-  <!-- <script language="javascript">                                  -->
-  <!--   function toggle(num) {                                        -->
-  <!--       var ele = document.getElementById("toggleText" + num);    -->
-  <!--       var text = document.getElementById("displayText" + num);  -->
-  <!--       if(ele.style.display == "block") {                        -->
-  <!--           ele.style.display = "none";                           -->
-  <!--           text.innerHTML = "show";                              -->
-  <!--       }                                                         -->
-  <!--       else {                                                    -->
-  <!--           ele.style.display = "block";                          -->
-  <!--           text.innerHTML = "hide";                              -->
-  <!--       }                                                         -->
-  <!--   }                                                             -->
-  <!-- </script>                                                       -->
-
-
-  <!--  <a id="displayText" href="javascript:toggle(1);">Show code</a> -->
-  <!--  <div id="toggleText1" style="display: none">                   -->
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = T, warning = FALSE, cache=T)
 options(autoSetVariableLabels = TRUE
