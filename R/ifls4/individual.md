@@ -1,0 +1,177 @@
+# Individual Level Data
+
+  <script language="javascript"> 
+    function toggle(num) {
+        var ele = document.getElementById("toggleText" + num);
+        var text = document.getElementById("displayText" + num);
+        if(ele.style.display == "block") {
+            ele.style.display = "none";
+            text.innerHTML = "show";
+        }
+        else {
+            ele.style.display = "block";
+            text.innerHTML = "hide";
+        }
+    } 
+  </script>
+
+
+   <a id="displayText" href="javascript:toggle(1);">Show code</a>
+   <div id="toggleText1" style="display: none">
+
+
+
+
+```r
+options(autoSetVariableLabels = TRUE, autoSetValueLabels = TRUE, value_labels = "haven", read_stata = "haven", scipen=10)
+
+pacman::p_load(  foreign
+               , myfunc
+                , plyr
+                , Hmisc
+                , ggplot2
+                , ggthemes
+                , sjPlot
+                , haven
+                , sjmisc
+                , texreg
+                , RColorBrewer
+                , DescTools
+                , moonBook
+                , stringr
+                , tidyr
+                , dplyr
+                , magrittr
+                )
+```
+</div>
+
+
+
+## Roster
+
+
+```r
+roster07 =
+    roster07 %>%
+    mutate_each(funs(as.character),pid, pid07, ar10, ar11,ar12,ar14) %>%
+    rename( dad_pid   = ar10
+           ,mom_pid   = ar11
+           ,carer_pid = ar12
+           ,sps_pid   = ar14
+           ,age       = ar09
+           ,birthyr   = ar08yr
+           ,birthmth  = ar08mth
+           ,birthday  = ar08day
+           ,marital   = ar13
+           ,religion  = ar15
+           ,ethnic    = ar15d
+           ,working   = ar15a
+           ,inschool  = ar18c
+           ,panel     = ar18x
+           ,salary    = ar15b
+           ,edulevel  = ar16
+           ,edugrade  = ar17
+           ,sex       = ar07
+           ,rel2hh    = ar02
+           )
+
+roster07 = set_label(roster07, lroster07)
+
+roster07 =
+    roster07 %>%
+    mutate(married = ifelse(marital==2, 1, 0))
+```
+
+
+## Education coding
+   <a id="displayText" href="javascript:toggle(5);">Show code</a>
+   <div id="toggleText5" style="display: none">
+
+
+```r
+roster07 %<>% mutate(primgrad=NA,jungrad=NA,highgrad=NA, colgrad=NA)
+
+# recode NA
+roster07$edulevel[roster07$edulevel %in% 90:99] <- NA
+roster07$edugrade[roster07$edugrade %in% 90:99] <- NA
+
+
+# not graduate (edugrade!=7) means dropout (prim=0)
+
+roster07$primgrad[with(roster07, (edulevel==2
+                                  | edulevel==11 | edulevel==72) &
+                       edugrade!=7)] <- 0
+
+roster07$primgrad[with(roster07, (edulevel==2
+                                  | edulevel==11 | edulevel==72) &
+                       edugrade==7)] <- 1
+
+# Those who has been at junior high school must also have graduated from primary school
+
+roster07$primgrad[with(roster07, edulevel==3
+                       | edulevel==4 | edulevel==12
+                       | edulevel==73) ] = 1
+
+roster07$primgrad[with(roster07, edulevel==5
+                       | edulevel==6 | edulevel==15
+                       | edulevel==74)] = 1
+
+roster07$primgrad[with(roster07, edulevel %in% c(13, 60:63))] <- 1
+
+# Those whose highest level is only primary will not be in junior highschool
+
+roster07$jungrad[with(roster07, edulevel==2
+                      | edulevel==11 | edulevel==72)] <- 0
+
+roster07$jungrad[with(roster07, (edulevel==3
+                                 | edulevel==4 | edulevel==12
+                                 | edulevel==73) & edugrade!=7)] <-0
+
+roster07$jungrad[with(roster07, (edulevel==3
+                                 | edulevel==4 | edulevel==12
+                                 | edulevel==73) & edugrade==7)] <-1
+
+roster07$jungrad[with(roster07, edulevel==5
+                      | edulevel==6 | edulevel==15
+                      | edulevel==74)] <-1
+
+roster07$jungrad[with(roster07, edulevel %in% c(13, 60:63))] <- 1
+
+# Those who highest grade primary and secondary must not have attended high school
+
+roster07$highgrad[with(roster07, edulevel==2
+                       | edulevel==11 | edulevel==72)] <- 0
+
+roster07$highgrad[with(roster07, edulevel==3
+                       | edulevel==4 | edulevel==12
+                       | edulevel==73) ] <- 0
+
+roster07$highgrad[with(roster07, (edulevel==5
+                                  | edulevel==6 | edulevel==15
+                                  | edulevel==74) & edugrade==7)] <-1
+
+roster07$highgrad[with(roster07, (edulevel==5
+                                  | edulevel==6 | edulevel==15
+                                  | edulevel==74) & edugrade!=7)] <-0
+
+roster07$highgrad[with(roster07, edulevel %in% c(13, 60:63))] <- 1
+
+# College and postgraduate
+
+roster07$colgrad[with(roster07, edulevel==2
+                      | edulevel==11 | edulevel==72)] <- 0
+
+roster07$colgrad[with(roster07, edulevel==3
+                      | edulevel==4 | edulevel==12
+                      | edulevel==73) ] <- 0
+
+roster07$colgrad[with(roster07, edulevel==5
+                      | edulevel==6 | edulevel==15
+                      | edulevel==74)] <-0
+
+roster07$colgrad[with(roster07, edulevel %in% c(13, 60:63) & edugrade==7)] <- 1
+roster07$colgrad[with(roster07, edulevel %in% 62:63)] <- 1
+roster07$colgrad[with(roster07, edulevel %in% c(13, 60:63) & edugrade!=7)] <- 0
+```
+</div>
